@@ -46,7 +46,7 @@ var compatible = {
 var EventBind = function (text) {
     if (this instanceof EventBind) {
         this.constructor = this;
-        this.text = text;
+        this.text = text || {};
         //让构造器指向自己
         //创建弹窗消息
         this.popMsg = document.createElement("DIV");
