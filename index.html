@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>弹窗样式</title>
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="message.css">
+</head>
+<body>
+<button id="inform">通知类消息弹窗</button>
+<button id="delete1">删除类消息弹窗</button>
+<button id="delete2">删除类消息弹窗</button>
+<button id="imgAlert">图片上传类弹窗</button>
+<script src="message.js"></script>
+<script>
+    compatible.addEvent(document.getElementById('inform'), 'click', function (event) {
+        new Inform({title: '通知', content: '这是一条通知'}).alert(function () {
+            console.log('您收到了这条通知');
+        });
+    });
+    compatible.addEvent(document.getElementById('delete1'), 'click', function (event) {
+        new Delete({title: '删除', content: '您确定要删除吗?<br /><span class="red">删除后无法恢复</span>'}).alert();
+    });
+    compatible.addEvent(document.getElementById('delete2'), 'click', function (event) {
+        new Delete({title: '删除', content: '您确定要删除吗?<br /><span class="red">删除后无法恢复</span>'}).alert(1, "123");
+    });
+    compatible.addEvent(document.getElementById('imgAlert'), 'click', function (event) {
+        new ImgUpload({title: '上传图片', name: 'logo'}).alert('url');
+    });
+</script>
+</body>
+</html>
