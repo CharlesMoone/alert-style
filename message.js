@@ -176,6 +176,7 @@ Delete.prototype.alert = function (id, url) {
                 case 'confirm':
                     that.popMsg.parentNode.removeChild(that.popMsg);
                     that.removeList();
+                    break;
             }
             that.removeEvent(that.popMsg, 'click');
         } catch (e) {console.log(e);}
@@ -235,6 +236,7 @@ Inform.prototype.alert = function (callback) {
                 case 'confirm':
                     that.popMsg.parentNode.removeChild(that.popMsg);
                     that.callback();
+                    break;
             }
             that.removeEvent(that.popMsg, 'click');
         } catch (e) {console.log(e);}
