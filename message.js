@@ -22,12 +22,23 @@ var inheritPrototype = function (superClass, subClass) {
  */
 var compatible = {
     addEvent: function (dom, type, fn) {
+        fn = fn || function () {};
         if (dom.addEventListener) {
             dom.addEventListener(type, fn, false);
         } else if (dom.attachEvent) {
             dom.attachEvent('on' + type, fn);
         } else {
             dom['on' + type] = fn;
+        }
+    },
+    removeEvent: function (dom, type, fn) {
+        fn = fn || function () {};
+        if (dom.removeEventListener) {
+            dom.removeEventListener(type, fn, false);
+        } else if (dom.detachEvent) {
+            dom.detachEvent('on' + type, fn);
+        } else {
+            dom['on' + type] = null;
         }
     },
     getEvent: function (event) {
@@ -94,20 +105,9 @@ EventBind.prototype = {
         pClose.innerHTML = "取消";
         this.down.innerHTML = null;
         this.insert(this.down, p).insert(this.down, pClose);
-
-        var that = this;
-        //冒泡事件绑定,判断点击的目标是否name为popOut,如果是则remove掉它。
-        this.addEvent(document.getElementsByTagName('body')[0], 'click', function (event) {
-            event = that.getEvent(event);
-            var target = that.getTarget(event);
-            if (target.getAttribute('name') == 'popOut') {
-                try {
-                    that.popMsg.parentNode.removeChild(that.popMsg);
-                } catch (e) {console.log(e);}
-            }
-        });
     },
     addEvent: compatible.addEvent,
+    removeEvent: compatible.removeEvent,
     getEvent: compatible.getEvent,
     getTarget: compatible.getTarget,
     insert: function (superClass, subClass) {
@@ -168,12 +168,17 @@ Delete.prototype.alert = function (id, url) {
     this.addEvent(this.popMsg, 'click', function (event) {
         event = that.getEvent(event);
         var target = that.getTarget(event);
-        if (target.getAttribute('name') == 'confirm') {
-            try {
-                that.popMsg.parentNode.removeChild(that.popMsg);
-                that.removeList();
-            } catch (e) {console.log(e);}
-        }
+        try {
+            switch (target.getAttribute('name')) {
+                case 'popOut':
+                    that.popMsg.parentNode.removeChild(that.popMsg);
+                    break;
+                case 'confirm':
+                    that.popMsg.parentNode.removeChild(that.popMsg);
+                    that.removeList();
+            }
+            that.removeEvent(that.popMsg, 'click');
+        } catch (e) {console.log(e);}
     });
 };
 Delete.prototype.removeList = function () {
@@ -222,12 +227,17 @@ Inform.prototype.alert = function (callback) {
     this.addEvent(this.popMsg, 'click', function (event) {
         event = that.getEvent(event);
         var target = that.getTarget(event);
-        if (target.getAttribute('name') == 'confirm') {
-            try {
-                that.popMsg.parentNode.removeChild(that.popMsg);
-                that.callback();
-            } catch (e) {console.log(e);}
-        }
+        try {
+            switch (target.getAttribute('name')) {
+                case 'popOut':
+                    that.popMsg.parentNode.removeChild(that.popMsg);
+                    break;
+                case 'confirm':
+                    that.popMsg.parentNode.removeChild(that.popMsg);
+                    that.callback();
+            }
+            that.removeEvent(that.popMsg, 'click');
+        } catch (e) {console.log(e);}
     });
 };
 
@@ -308,13 +318,17 @@ ImgUpload.prototype.alert = function (url) {
     this.addEvent(this.popMsg, 'click', function (event) {
         event = that.getEvent(event);
         var target = that.getTarget(event);
-        if (target.getAttribute('name') == 'confirm') {
-            try {
-                // document.getElementById('imgUpload').submit();
-                that.popMsg.parentNode.removeChild(that.popMsg);
-                new Inform({title: '通知', content: '图片上传完成'}).alert();
-            } catch (e) {console.log(e);}
-        }
+        try {
+            switch (target.getAttribute('name')) {
+                case 'popOut':
+                    that.popMsg.parentNode.removeChild(that.popMsg);
+                    break;
+                case 'confirm':
+                    that.popMsg.parentNode.removeChild(that.popMsg);
+                    new Inform({title: '通知', content: '图片上传完成'}).alert();
+            }
+            that.removeEvent(that.popMsg, 'click');
+        } catch (e) {console.log(e);}
     });
 };
 ImgUpload.prototype.canvasShow = function (imgSrc) {
