@@ -2,6 +2,8 @@ alert-弹窗样式
 ---
 以类的方式实现的弹窗样式
 
+[demo](http://charlesmoone.github.io/alert-style)
+
 弹窗必须需要包含
 
     <link rel="stylesheet" href="message.css" />
