@@ -51,7 +51,7 @@ var compatible = {
 
 /**
  * 绑定弹窗事件类
- * @param text 内容对象{title: xxx, content: xxx}
+ * @type text{title: xxx, content: xxx} 内容对象
  * @constructor 指向自己
  */
 var EventBind = function (text) {
